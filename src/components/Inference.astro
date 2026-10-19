@@ -1,0 +1,89 @@
+---
+// Prompt chips that stream a CV-based answer token by token, coloured like a tokenizer view.
+const prompts = [
+  {
+    q: 'Who is Marwan Hatem?',
+    a: 'Marwan Hatem is an AI engineer based in Cairo, finishing a BSc in Artificial Intelligence at Arab Open University in 2027. He works across computer vision, deep learning, NLP and LLMs, and uses n8n to turn trained models into automated workflows.',
+  },
+  {
+    q: 'What has he built?',
+    a: 'NeuroScan AI, a custom SE-ResNet CNN trained from scratch to classify brain MRI scans into 15 tumor subtypes with Grad-CAM explanations. A fully local desktop assistant using YOLOv8, BART and MarianMT, covered by 300+ automated tests. And an n8n pipeline that writes content with LLMs and publishes it to LinkedIn.',
+  },
+  {
+    q: 'Why hire him?',
+    a: 'He ships complete systems, not just notebooks: the trained model, the API, the interface and the tests. He is deepening LLM, RAG and MLOps skills in an Advanced AI Diploma, and brings leadership and clear communication to a team.',
+  },
+];
+---
+<div class="infer">
+  <div class="infer-head"><strong>Ask about Marwan</strong><span>Answers come from his CV</span></div>
+  <div class="prompts" role="group" aria-label="Choose a question">
+    {prompts.map((p, i) => <button type="button" data-i={i} aria-pressed={i === 0 ? 'true' : 'false'}>{p.q}</button>)}
+  </div>
+  <div class="io">
+    <div class="q" id="q">&gt; {prompts[0].q}</div>
+    <div class="a" id="a" aria-live="polite">{prompts[0].a}</div>
+  </div>
+  <div class="infer-foot">
+    <span id="stats">&nbsp;</span>
+    <button type="button" class="toggle-colors" id="tc" aria-pressed="false">Hide token colours</button>
+  </div>
+</div>
+
+<script define:vars={{ prompts }}>
+  const out = document.getElementById('a');
+  const q = document.getElementById('q');
+  const stats = document.getElementById('stats');
+  const buttons = document.querySelectorAll('.prompts button');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let timer = 0;
+
+  // Rough word-piece split: leading space stays with its word, long words break in two.
+  const tokenize = (s) => (s.match(/ ?[A-Za-z]+|\d+|[^\sA-Za-z\d]| /g) || []).flatMap((t) => {
+    const w = t.trim();
+    return w.length > 8 ? [t.slice(0, t.length - 4), t.slice(-4)] : [t];
+  });
+
+  function run(i) {
+    clearInterval(timer);
+    const toks = tokenize(prompts[i].a);
+    q.textContent = '> ' + prompts[i].q;
+    out.textContent = '';
+    out.setAttribute('aria-busy', 'true');
+    const caret = document.createElement('span');
+    caret.className = 'caret';
+    let n = 0;
+    const t0 = performance.now();
+    const add = () => {
+      const s = document.createElement('span');
+      s.className = 'tok';
+      s.textContent = toks[n++];
+      out.insertBefore(s, caret);
+    };
+    const done = () => {
+      caret.remove();
+      out.removeAttribute('aria-busy');
+      const secs = Math.max(0.001, (performance.now() - t0) / 1000);
+      stats.textContent = still ? `${toks.length} tokens` : `${toks.length} tokens, ${Math.round(toks.length / secs)} tokens/s`;
+    };
+    if (still) { while (n < toks.length) add(); out.append(caret); done(); return; }
+    out.append(caret);
+    timer = setInterval(() => { add(); if (n >= toks.length) { clearInterval(timer); done(); } }, 28);
+  }
+
+  buttons.forEach((b) => b.addEventListener('click', () => {
+    buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    run(Number(b.dataset.i));
+  }));
+
+  const tc = document.getElementById('tc');
+  tc.addEventListener('click', () => {
+    const plain = out.classList.toggle('plain');
+    tc.setAttribute('aria-pressed', String(plain));
+    tc.textContent = plain ? 'Show token colours' : 'Hide token colours';
+  });
+
+  // Stream the first answer once the panel scrolls into view.
+  const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { run(0); io.disconnect(); } }, { threshold: 0.4 });
+  io.observe(out);
+</script>

@@ -12,18 +12,19 @@ const d = project.data;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 <Base title={`${d.title}, Marwan Hatem`} description={d.summary}>
-  <article class="case">
-    <div class="wrap">
-      <a href={`${base}/#projects`} class="back">Back to all projects</a>
-      <h1>{d.title}</h1>
-      <p class="sub">{d.summary}</p>
-      <div class="meta">
-        <span>{d.category}</span>
-        {d.date && <span>{d.date}</span>}
-        <span>Built with {d.tags.join(', ')}</span>
-        {d.github && <a href={d.github} target="_blank" rel="noopener">Source on GitHub</a>}
-      </div>
-      <div class="prose"><Content /></div>
-    </div>
+  <article class="wrap case">
+    <a href={`${base}/#projects`} class="back">Back to all projects</a>
+    <h1>{d.title}</h1>
+    <p class="sub">{d.summary}</p>
+    <ul class="tags" aria-label="Built with">{d.tags.map((t) => <li>{t}</li>)}</ul>
+    <table class="results" style="margin-top:32px">
+      <tbody>
+        <tr><td>Type</td><td>{d.category}{d.date && `, ${d.date}`}</td></tr>
+        <tr><td>Task</td><td>{d.task}</td></tr>
+        <tr><td>Result</td><td>{d.result}</td></tr>
+        {d.github && <tr><td>Source</td><td><a href={d.github} target="_blank" rel="noopener">View on GitHub</a></td></tr>}
+      </tbody>
+    </table>
+    <div class="prose"><Content /></div>
   </article>
 </Base>

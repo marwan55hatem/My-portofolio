@@ -2,25 +2,27 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import Heatmap from '../components/Heatmap.astro';
+import Inference from '../components/Inference.astro';
 import jelecom from '../assets/certs/jelcom-ml.png';
 import aou from '../assets/certs/aou-ml.png';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const path = [
-  ['Feb 2026 – now', 'Advanced AI Diploma', 'Instant Software Solutions. Deep learning, computer vision, NLP, LLMs, RAG and MLOps, including an LLM project.'],
-  ['Jul – Dec 2025', 'Data Engineer & AI, DEPI', 'Built and optimised data pipelines, prepared datasets for AI, and supported model integration and deployment.'],
-  ['Aug 2024', 'ML & Computer Vision Fundamentals', 'Arab Open University. Object detection, edge detection, segmentation and deep learning basics.'],
-  ['Sep 2023 – Feb 2027', 'BSc in Artificial Intelligence', 'Arab Open University, Cairo.'],
+const focus = ['Computer Vision', 'Deep Learning', 'NLP', 'LLMs', 'RAG', 'Automation'];
+const education = [
+  ['Feb 2026 – now', 'Advanced AI Diploma, Instant Software Solutions', 'Deep learning, computer vision, NLP, LLMs, RAG and MLOps, with an LLM project.'],
+  ['Jul – Dec 2025', 'Data Engineer & AI, DEPI', 'Built and optimised data pipelines, prepared datasets for AI, supported model integration and deployment.'],
+  ['Aug 2024', 'ML & Computer Vision Fundamentals, Arab Open University', 'Object detection, edge detection, segmentation and deep learning basics.'],
+  ['Sep 2023 – Feb 2027', 'BSc in Artificial Intelligence, Arab Open University', 'Machine learning and deep learning coursework, Cairo.'],
 ];
 const skills = [
-  ['Deep learning', 'PyTorch, TensorFlow, custom CNN architectures, Grad-CAM explainability'],
-  ['Computer vision', 'YOLOv8 object detection, image classification, segmentation'],
-  ['Language & LLMs', 'NLP, HuggingFace Transformers (BART, MarianMT), LLMs, RAG, OpenAI / OpenRouter APIs'],
-  ['Engineering', 'Python, OOP and SOLID design, FastAPI, PyQt5, SQLite, automated testing'],
-  ['Data & automation', 'n8n workflows, data pipelines, data visualisation, MLOps'],
+  ['Deep learning', ['PyTorch', 'TensorFlow', 'Custom CNNs', 'Grad-CAM']],
+  ['Computer vision', ['YOLOv8', 'Classification', 'Segmentation', 'Object detection']],
+  ['Language models', ['HuggingFace', 'BART', 'MarianMT', 'LLMs', 'RAG', 'OpenAI / OpenRouter']],
+  ['Engineering', ['Python', 'OOP / SOLID', 'FastAPI', 'PyQt5', 'SQLite', 'Automated testing']],
+  ['Data & automation', ['n8n', 'Data pipelines', 'Data visualisation', 'MLOps']],
+  ['Working style', ['Leadership', 'Teamwork', 'Presenting', 'Project management', 'Problem solving']],
 ];
 const certs = [
   { img: aou, title: 'Fundamentals of Data Science and Machine Learning', by: 'Arab Open University, Jun – Aug 2024' },
@@ -28,103 +30,101 @@ const certs = [
 ];
 ---
 <Base>
-  <section class="hero" id="home">
-    <Heatmap />
-    <div class="wrap">
-      <h1><span class="det"><span class="tagbox" aria-hidden="true">ai_engineer 0.99</span>Marwan<br />Hatem</span></h1>
-      <p class="intro">I build AI systems that work outside the notebook: medical image classifiers, on-device vision and language tools, and automated LLM pipelines.</p>
-      <div class="actions">
-        <a href="#projects" class="btn fill">See projects</a>
-        <a href="/Marwan_Hatem_CV.pdf" download class="btn line">Download CV (PDF)</a>
-      </div>
-    </div>
-    <div class="legend" aria-hidden="true">low <i></i> attention</div>
-  </section>
-
-  <section class="block" id="projects">
-    <div class="wrap">
-      <h2>Projects I designed and built end to end</h2>
-      <div class="index">
-        {projects.map((p, i) => (
-          <a class:list={['row', { lead: i === 0 }]} href={`${base}/projects/${p.id}/`}>
-            <div class="when">{p.data.category}{p.data.date && <><br />{p.data.date}</>}</div>
-            <div><h3>{p.data.title}</h3><p>{p.data.summary}</p></div>
-            <div class="stack">{p.data.tags.join(', ')}</div>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="block" id="about">
-    <div class="wrap">
-      <h2>About me</h2>
-      <div class="about">
-        <div>
-          <p>I'm an AI engineering student in Cairo with training in machine learning and deep learning, and I like turning that theory into software people can actually run.</p>
-          <p>Most of my projects combine a trained model with the product around it: a dashboard, a desktop app, or an n8n workflow that connects AI steps so a whole process runs on its own.</p>
-          <p>Outside the code I bring leadership, teamwork and clear communication, and I'm looking for an AI engineering role where I can keep learning on hard problems.</p>
+  <div class="wrap card">
+    <div class="main">
+      <section class="intro" id="home">
+        <h1>Marwan Hatem</h1>
+        <p class="role">AI engineer in Cairo. I train models and build the software around them.</p>
+        <ul class="tags" aria-label="Focus areas">{focus.map((f) => <li>{f}</li>)}</ul>
+        <div class="mobile-cta">
+          <a class="btn primary" href="/Marwan_Hatem_CV.pdf" target="_blank" rel="noopener">View CV</a>
+          <a class="btn ghost" href="#contact">Contact</a>
         </div>
-        <ol class="path" aria-label="Education and training">
-          {path.map(([when, what, desc]) => (
-            <li><time>{when}</time><h3>{what}</h3><p>{desc}</p></li>
+        <Inference />
+      </section>
+
+      <section id="projects">
+        <h2>Projects</h2>
+        <table class="results">
+          <thead><tr><th scope="col">Project</th><th scope="col">Task</th><th scope="col">Result</th></tr></thead>
+          <tbody>
+            {projects.map((p) => (
+              <tr>
+                <td><a href={`${base}/projects/${p.id}/`}>{p.data.title}</a><small>{p.data.tags.join(', ')}</small></td>
+                <td>{p.data.task}</td>
+                <td>{p.data.result}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="muted" style="margin-top:14px;font-size:15px">Select a project name to read how it was built.</p>
+      </section>
+
+      <section id="education">
+        <h2>Education and training</h2>
+        <ol class="steps">
+          {education.map(([when, what, desc]) => (
+            <li><time>{when}</time><div><h3>{what}</h3><p>{desc}</p></div></li>
           ))}
         </ol>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <section class="block" id="skills">
-    <div class="wrap">
-      <h2>What I work with</h2>
-      <dl class="skills">
-        {skills.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
-      </dl>
-      <p class="soft"><b>Also:</b> leadership, teamwork, presentations, time management, project management, problem solving.</p>
-    </div>
-  </section>
+      <section id="skills">
+        <h2>Skills</h2>
+        <dl class="skillset">
+          {skills.map(([k, items]) => (
+            <div><dt>{k}</dt><dd><ul class="tags">{(items as string[]).map((s) => <li>{s}</li>)}</ul></dd></div>
+          ))}
+        </dl>
+      </section>
 
-  <section class="block" id="certificates">
-    <div class="wrap">
-      <h2>Certificates</h2>
-      <div class="certs">
-        {certs.map((c) => (
-          <figure class="cert">
-            <div class="frame"><Image src={c.img} alt={`Certificate: ${c.title}`} widths={[400, 700]} sizes="(min-width:860px) 340px, 100vw" loading="lazy" /></div>
-            <figcaption><h3>{c.title}</h3><p>{c.by}</p></figcaption>
-          </figure>
-        ))}
-        <a class="cert" href="/certificates/depi-data-engineer.pdf" target="_blank" rel="noopener">
-          <div class="frame"><span>Digital Egypt Pioneers Program</span></div>
-          <div><h3>Microsoft Data Engineer track, DEPI</h3><p>Jun – Dec 2025. Opens the PDF certificate.</p></div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <section class="block" id="contact">
-    <div class="wrap">
-      <h2>Get in touch</h2>
-      <div class="contact">
-        <div>
-          <p class="lead-p">Hiring for an AI role, or have a project in mind? Email me or use the form.</p>
-          <p style="margin-top:24px"><a class="mail" href="mailto:marwan55hatem@gmail.com">marwan55hatem@gmail.com</a></p>
-          <div class="facts">
-            <span>Phone and WhatsApp: <a href="tel:+201006453612">+20 100 645 3612</a></span>
-            <span>Based in Gesr Al Suez, Cairo, Egypt</span>
-            <span><a href="https://github.com/marwan55hatem" target="_blank" rel="noopener">GitHub</a>, <a href="https://www.linkedin.com/in/marwan-hatem/" target="_blank" rel="noopener">LinkedIn</a></span>
-          </div>
+      <section id="certificates">
+        <h2>Certificates</h2>
+        <div class="certs">
+          {certs.map((c) => (
+            <figure class="cert">
+              <div class="frame"><Image src={c.img} alt={`Certificate: ${c.title}`} widths={[400, 700]} sizes="(min-width:960px) 260px, 100vw" loading="lazy" /></div>
+              <figcaption><h3>{c.title}</h3><p>{c.by}</p></figcaption>
+            </figure>
+          ))}
+          <a class="cert" href="/certificates/depi-data-engineer.pdf" target="_blank" rel="noopener">
+            <div class="frame"><span>Digital Egypt Pioneers Program</span></div>
+            <h3>Microsoft Data Engineer track, DEPI</h3>
+            <p>Jun – Dec 2025. Opens the PDF in a new tab.</p>
+          </a>
         </div>
+      </section>
+
+      <section id="contact">
+        <h2>Contact</h2>
+        <p class="muted">Hiring for an AI role or have a project in mind? Send a message and I'll reply by email.</p>
         <form id="form" action="https://formspree.io/f/xqayjrdg" method="POST">
           <div><label for="n">Your name</label><input id="n" name="name" required autocomplete="name" /></div>
           <div><label for="e">Your email</label><input id="e" type="email" name="email" required autocomplete="email" /></div>
           <div><label for="m">Message</label><textarea id="m" name="message" required></textarea></div>
-          <div><button class="btn fill" id="send" type="submit">Send message</button></div>
+          <div><button class="btn primary" id="send" type="submit">Send message</button></div>
           <div id="fs" role="status"></div>
         </form>
-      </div>
+      </section>
     </div>
-  </section>
+
+    <aside class="side" aria-label="Profile summary">
+      <div class="panel">
+        <p class="status"><i aria-hidden="true"></i>Open to AI engineering roles</p>
+        <div class="btns">
+          <a class="btn primary" href="/Marwan_Hatem_CV.pdf" target="_blank" rel="noopener">View CV</a>
+          <a class="btn ghost" href="mailto:marwan55hatem@gmail.com">Email me</a>
+        </div>
+      </div>
+      <dl class="panel facts">
+        <div><dt>Location</dt><dd>Gesr Al Suez, Cairo, Egypt</dd></div>
+        <div><dt>Education</dt><dd>BSc Artificial Intelligence, Arab Open University, 2027</dd></div>
+        <div><dt>Email</dt><dd><a href="mailto:marwan55hatem@gmail.com">marwan55hatem@gmail.com</a></dd></div>
+        <div><dt>Phone and WhatsApp</dt><dd><a href="tel:+201006453612">+20 100 645 3612</a></dd></div>
+        <div><dt>Profiles</dt><dd><a href="https://github.com/marwan55hatem" target="_blank" rel="noopener">GitHub</a>, <a href="https://www.linkedin.com/in/marwan-hatem/" target="_blank" rel="noopener">LinkedIn</a></dd></div>
+      </dl>
+    </aside>
+  </div>
 </Base>
 
 <script>

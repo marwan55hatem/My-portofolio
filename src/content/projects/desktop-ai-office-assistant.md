@@ -9,6 +9,8 @@ highlights:
   - "Validated end-to-end on Windows 11 with an RTX 4050 GPU"
 tags: ["Python", "PyQt5", "YOLOv8", "HuggingFace", "SQLite"]
 order: 2
+task: "Real-time focus tracking with on-device NLP tools"
+result: "Runs fully offline on an RTX 4050, 300+ automated acceptance tests"
 ---
 ## The problem
 

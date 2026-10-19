@@ -9,6 +9,8 @@ highlights:
   - "FastAPI dashboard: real-time inference, drag-and-drop upload, animated confidence gauge, PDF reports"
 tags: ["PyTorch", "FastAPI", "Grad-CAM", "JavaScript"]
 order: 1
+task: "Brain MRI classification, 15 tumor subtypes plus normal"
+result: "Explainable predictions with Grad-CAM and exportable PDF reports"
 ---
 ## The problem
 

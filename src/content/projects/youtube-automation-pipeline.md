@@ -9,6 +9,8 @@ highlights:
   - "Automated publishing to LinkedIn"
 tags: ["n8n", "OpenAI", "OpenRouter", "LinkedIn API"]
 order: 3
+task: "AI content generation and cross-platform publishing"
+result: "Hands-off pipeline from generated script to LinkedIn post"
 ---
 ## The problem
 

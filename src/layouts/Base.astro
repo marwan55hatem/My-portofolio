@@ -8,7 +8,7 @@ const {
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
-const links = [['Projects', '#projects'], ['About', '#about'], ['Skills', '#skills'], ['Certificates', '#certificates'], ['Contact', '#contact']];
+const links = [['Projects', '#projects'], ['Education', '#education'], ['Skills', '#skills'], ['Certificates', '#certificates'], ['Contact', '#contact']];
 const person = {
   '@context': 'https://schema.org', '@type': 'Person', name: 'Marwan Hatem',
   jobTitle: 'AI Engineer', url: Astro.site?.toString(),
@@ -34,7 +34,7 @@ const person = {
   <meta name="twitter:card" content="summary" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400..800&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <script is:inline>
     (function () {
       var t = null;
@@ -46,10 +46,10 @@ const person = {
   <script type="application/ld+json" set:html={JSON.stringify(person)} />
 </head>
 <body>
-  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-[var(--panel)] focus:px-4 focus:py-2">Skip to content</a>
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-[var(--surface)] focus:px-4 focus:py-2">Skip to content</a>
   <header class="bar">
     <div class="wrap">
-      <a href={home} class="name">Marwan Hatem</a>
+      <a href={home} class="repo"><span>marwan-hatem /</span> <b>ai-engineer</b></a>
       <nav aria-label="Sections">
         {links.map(([l, h]) => <a href={home + h}>{l}</a>)}
       </nav>
