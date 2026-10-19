@@ -5,6 +5,7 @@ import Base from '../layouts/Base.astro';
 import Inference from '../components/Inference.astro';
 import jelecom from '../assets/certs/jelcom-ml.png';
 import aou from '../assets/certs/aou-ml.png';
+import depi from '../assets/certs/depi-data-engineer.png';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -24,7 +25,8 @@ const skills = [
   ['Data & automation', ['n8n', 'Data pipelines', 'Data visualisation', 'MLOps']],
   ['Working style', ['Leadership', 'Teamwork', 'Presenting', 'Project management', 'Problem solving']],
 ];
-const certs = [
+const certs: { img: ImageMetadata; title: string; by: string; pdf?: string }[] = [
+  { img: depi, title: 'Microsoft Data Engineer, Digital Egypt Pioneers Program', by: 'DEPI, Ministry of Communications and IT, Jun – Dec 2025', pdf: '/certificates/depi-data-engineer.pdf' },
   { img: aou, title: 'Fundamentals of Data Science and Machine Learning', by: 'Arab Open University, Jun – Aug 2024' },
   { img: jelecom, title: 'Machine Learning Basics, 40 hours, graded Excellent', by: 'Jelecom Egypt, Aug – Sep 2023' },
 ];
@@ -82,16 +84,11 @@ const certs = [
         <h2>Certificates</h2>
         <div class="certs">
           {certs.map((c) => (
-            <figure class="cert">
+            <a class="cert" href={c.pdf ? `${base}${c.pdf}` : c.img.src} target="_blank" rel="noopener">
               <div class="frame"><Image src={c.img} alt={`Certificate: ${c.title}`} widths={[400, 700]} sizes="(min-width:960px) 260px, 100vw" loading="lazy" /></div>
-              <figcaption><h3>{c.title}</h3><p>{c.by}</p></figcaption>
-            </figure>
+              <h3>{c.title}</h3><p>{c.by}</p>
+            </a>
           ))}
-          <a class="cert" href={`${base}/certificates/depi-data-engineer.pdf`} target="_blank" rel="noopener">
-            <div class="frame"><span>Digital Egypt Pioneers Program</span></div>
-            <h3>Microsoft Data Engineer track, DEPI</h3>
-            <p>Jun – Dec 2025. Opens the PDF in a new tab.</p>
-          </a>
         </div>
       </section>
 
