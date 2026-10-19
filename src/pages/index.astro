@@ -37,7 +37,7 @@ const certs = [
         <p class="role">AI engineer in Cairo. I train models and build the software around them.</p>
         <ul class="tags" aria-label="Focus areas">{focus.map((f) => <li>{f}</li>)}</ul>
         <div class="mobile-cta">
-          <a class="btn primary" href="/Marwan_Hatem_CV.pdf" target="_blank" rel="noopener">View CV</a>
+          <a class="btn primary" href={`${base}/Marwan_Hatem_CV.pdf`} target="_blank" rel="noopener">View CV</a>
           <a class="btn ghost" href="#contact">Contact</a>
         </div>
         <Inference />
@@ -87,7 +87,7 @@ const certs = [
               <figcaption><h3>{c.title}</h3><p>{c.by}</p></figcaption>
             </figure>
           ))}
-          <a class="cert" href="/certificates/depi-data-engineer.pdf" target="_blank" rel="noopener">
+          <a class="cert" href={`${base}/certificates/depi-data-engineer.pdf`} target="_blank" rel="noopener">
             <div class="frame"><span>Digital Egypt Pioneers Program</span></div>
             <h3>Microsoft Data Engineer track, DEPI</h3>
             <p>Jun – Dec 2025. Opens the PDF in a new tab.</p>
@@ -112,7 +112,7 @@ const certs = [
       <div class="panel">
         <p class="status"><i aria-hidden="true"></i>Open to AI engineering roles</p>
         <div class="btns">
-          <a class="btn primary" href="/Marwan_Hatem_CV.pdf" target="_blank" rel="noopener">View CV</a>
+          <a class="btn primary" href={`${base}/Marwan_Hatem_CV.pdf`} target="_blank" rel="noopener">View CV</a>
           <a class="btn ghost" href="mailto:marwan55hatem@gmail.com">Email me</a>
         </div>
       </div>
