@@ -1,0 +1,15 @@
+---
+interface Props { id: string; data: { title: string; summary: string; category: string; date?: string; icon: string; highlights: string[]; tags: string[]; github?: string } }
+const { id, data } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<article class="pc rv">
+  <div class="ic" aria-hidden="true">{data.icon}</div>
+  <div class="meta">{data.category}{data.date && ` · ${data.date}`}</div>
+  <h3><a href={`${base}/projects/${id}/`}>{data.title}</a></h3>
+  <p>{data.summary}</p>
+  <ul class="hl">{data.highlights.map((h) => <li>{h}</li>)}</ul>
+  <div class="tags">{data.tags.map((t) => <span>{t}</span>)}</div>
+  <span class="plink">Read case study →</span>
+  {data.github && <a class="plink" href={data.github} target="_blank" rel="noopener">View on GitHub ↗</a>}
+</article>
