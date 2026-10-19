@@ -1,0 +1,90 @@
+---
+// Grad-CAM style attention map rendered with the Turbo colormap; one hotspot follows the pointer.
+---
+<canvas id="heat" aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.getElementById('heat') as HTMLCanvasElement;
+  const host = canvas.parentElement!;
+  const ctx = canvas.getContext('2d')!;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const CELL = 8;
+
+  // Google's polynomial approximation of the Turbo colormap, 256-entry lookup.
+  const lut = new Uint8ClampedArray(256 * 3);
+  for (let i = 0; i < 256; i++) {
+    const x = i / 255;
+    const r = 0.13572138 + x * (4.6153926 + x * (-42.66032258 + x * (132.13108234 + x * (-152.94239396 + x * 59.28637943))));
+    const g = 0.09140261 + x * (2.19418839 + x * (4.84296658 + x * (-14.18503333 + x * (4.27729857 + x * 2.82956604))));
+    const b = 0.1066733 + x * (12.64194608 + x * (-60.58204836 + x * (110.36276771 + x * (-89.90310912 + x * 27.34824973))));
+    lut.set([r * 255, g * 255, b * 255], i * 3);
+  }
+
+  // Fixed hotspots as fractions of the hero: x, y, radius, weight.
+  // On narrow screens the text fills the width, so the hotspots move below it.
+  const wide = [
+    [0.8, 0.3, 0.13, 0.95],
+    [0.63, 0.8, 0.085, 0.7],
+    [0.95, 0.72, 0.075, 0.55],
+  ];
+  const narrow = [
+    [0.82, 0.91, 0.055, 0.95],
+    [0.3, 0.97, 0.04, 0.6],
+  ];
+  let fixed = wide;
+  const cursor = { x: 0.62, y: 0.4, tx: 0.62, ty: 0.4 };
+  let w = 0, h = 0, img: ImageData, raf = 0;
+
+  function resize() {
+    w = Math.max(1, Math.ceil(host.clientWidth / CELL));
+    h = Math.max(1, Math.ceil(host.clientHeight / CELL));
+    canvas.width = w; canvas.height = h;
+    img = ctx.createImageData(w, h);
+    const isNarrow = host.clientWidth < 860;
+    if ((fixed === narrow) !== isNarrow) {
+      fixed = isNarrow ? narrow : wide;
+      cursor.x = cursor.tx = isNarrow ? 0.6 : 0.62;
+      cursor.y = cursor.ty = isNarrow ? 0.94 : 0.4;
+    }
+    draw();
+  }
+
+  function draw() {
+    const aspect = w / h;
+    const spots = [...fixed, [cursor.x, cursor.y, 0.09, 0.9]];
+    const d = img.data;
+    for (let y = 0; y < h; y++) {
+      const fy = y / h;
+      for (let x = 0; x < w; x++) {
+        const fx = x / w;
+        let v = 0;
+        for (const [sx, sy, r, k] of spots) {
+          const dx = (fx - sx) * aspect, dy = fy - sy;
+          v += k * Math.exp(-(dx * dx + dy * dy) / (2 * r * r));
+        }
+        v = Math.min(1, v);
+        const o = (y * w + x) * 4, c = Math.round(v * 255) * 3;
+        d[o] = lut[c]; d[o + 1] = lut[c + 1]; d[o + 2] = lut[c + 2];
+        d[o + 3] = v < 0.08 ? 0 : Math.min(255, (v - 0.08) * 420);
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+
+  function tick() {
+    cursor.x += (cursor.tx - cursor.x) * 0.12;
+    cursor.y += (cursor.ty - cursor.y) * 0.12;
+    draw();
+    raf = Math.abs(cursor.tx - cursor.x) + Math.abs(cursor.ty - cursor.y) > 0.001 ? requestAnimationFrame(tick) : 0;
+  }
+
+  if (!still) {
+    host.addEventListener('pointermove', (e) => {
+      const b = host.getBoundingClientRect();
+      cursor.tx = (e.clientX - b.left) / b.width;
+      cursor.ty = (e.clientY - b.top) / b.height;
+      if (!raf) raf = requestAnimationFrame(tick);
+    });
+  }
+  new ResizeObserver(resize).observe(host);
+</script>

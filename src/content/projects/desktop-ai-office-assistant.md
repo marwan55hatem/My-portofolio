@@ -2,7 +2,6 @@
 title: "Desktop AI Office Assistant"
 summary: "A fully local productivity monitor that tracks focus, distraction and away time in real time, with on-device AI tools for summarization and translation."
 category: "Computer Vision / ML"
-icon: "🖥️"
 highlights:
   - "Webcam YOLOv8 detection (person + phone) plus Windows active-window classification"
   - "On-device BART-large-CNN summarization and MarianMT translation on CUDA"

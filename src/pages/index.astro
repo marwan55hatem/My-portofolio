@@ -2,139 +2,124 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+import Heatmap from '../components/Heatmap.astro';
 import jelecom from '../assets/certs/jelcom-ml.png';
 import aou from '../assets/certs/aou-ml.png';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const timeline = [
-  ['Feb 2026 – Present', 'Advanced AI Diploma', 'Instant Software Solutions: deep learning, computer vision, NLP, LLMs, RAG and MLOps, including an LLM project.'],
-  ['Jul – Dec 2025', 'Data Engineer & AI', 'DEPI: data pipelines, dataset cleaning, and supporting ML model integration and deployment.'],
-  ['Aug 2024', 'ML & Computer Vision Fundamentals', 'Arab Open University: object detection, edge detection, segmentation, deep learning basics.'],
-  ['Sept 2023 – Feb 2027', 'BSc in Artificial Intelligence', 'Arab Open University.'],
+const path = [
+  ['Feb 2026 – now', 'Advanced AI Diploma', 'Instant Software Solutions. Deep learning, computer vision, NLP, LLMs, RAG and MLOps, including an LLM project.'],
+  ['Jul – Dec 2025', 'Data Engineer & AI, DEPI', 'Built and optimised data pipelines, prepared datasets for AI, and supported model integration and deployment.'],
+  ['Aug 2024', 'ML & Computer Vision Fundamentals', 'Arab Open University. Object detection, edge detection, segmentation and deep learning basics.'],
+  ['Sep 2023 – Feb 2027', 'BSc in Artificial Intelligence', 'Arab Open University, Cairo.'],
 ];
 const skills = [
-  ['🤖', 'AI & Deep Learning', ['PyTorch', 'TensorFlow', 'Computer Vision', 'NLP', 'LLMs', 'RAG', 'MLOps', 'HuggingFace', 'YOLOv8']],
-  ['💻', 'Programming & Engineering', ['Python', 'OOP', 'FastAPI', 'PyQt5', 'SQLite']],
-  ['🔗', 'Data & Automation', ['Data Visualization', 'Data Pipelines', 'n8n', 'OpenAI / OpenRouter APIs']],
+  ['Deep learning', 'PyTorch, TensorFlow, custom CNN architectures, Grad-CAM explainability'],
+  ['Computer vision', 'YOLOv8 object detection, image classification, segmentation'],
+  ['Language & LLMs', 'NLP, HuggingFace Transformers (BART, MarianMT), LLMs, RAG, OpenAI / OpenRouter APIs'],
+  ['Engineering', 'Python, OOP and SOLID design, FastAPI, PyQt5, SQLite, automated testing'],
+  ['Data & automation', 'n8n workflows, data pipelines, data visualisation, MLOps'],
 ];
-const soft = ['Leadership', 'Teamwork', 'Presentation', 'Time Management', 'Communication', 'Project Management', 'Problem Solving'];
 const certs = [
-  { img: aou, title: 'Fundamentals of Data Science and Machine Learning', by: 'Arab Open University, Egypt · Jun – Aug 2024' },
-  { img: jelecom, title: 'Machine Learning Basics (40 hrs) · Grade: Excellent', by: 'Jelecom Egypt · Aug – Sep 2023' },
+  { img: aou, title: 'Fundamentals of Data Science and Machine Learning', by: 'Arab Open University, Jun – Aug 2024' },
+  { img: jelecom, title: 'Machine Learning Basics, 40 hours, graded Excellent', by: 'Jelecom Egypt, Aug – Sep 2023' },
 ];
 ---
 <Base>
   <section class="hero" id="home">
-    <div class="container hero-grid">
-      <div>
-        <div class="badge"><span class="dot"></span>Open to AI engineering opportunities</div>
-        <h1>Hi, I'm <span class="grad">Marwan Hatem</span></h1>
-        <div class="role">AI Engineer building real-world intelligent systems</div>
-        <p class="lead">I work across machine learning, deep learning, computer vision, NLP and LLMs, and connect them with n8n automation so models do useful work instead of sitting in notebooks.</p>
-        <p class="edu mono">BSc in Artificial Intelligence · Arab Open University · Sept 2023 – Feb 2027</p>
-        <div class="cta">
-          <a href="#projects" class="btn btn-p">View my work →</a>
-          <a href="/Marwan_Hatem_CV.pdf" download class="btn btn-s">Download CV</a>
-          <a href="#contact" class="btn btn-s">Contact</a>
-        </div>
-      </div>
-      <div class="hero-card" aria-hidden="true">
-        <div class="bar"><i></i><i></i><i></i></div>
-        <pre><span class="k">class</span> Engineer:
-  name   = <span class="s">"Marwan Hatem"</span>
-  focus  = [<span class="s">"CV"</span>, <span class="s">"DL"</span>, <span class="s">"NLP"</span>,
-            <span class="s">"LLMs"</span>, <span class="s">"RAG"</span>]
-  ships  = <span class="s">"things that work"</span>
-  based  = <span class="s">"Cairo, Egypt"</span></pre>
+    <Heatmap />
+    <div class="wrap">
+      <h1><span class="det"><span class="tagbox" aria-hidden="true">ai_engineer 0.99</span>Marwan<br />Hatem</span></h1>
+      <p class="intro">I build AI systems that work outside the notebook: medical image classifiers, on-device vision and language tools, and automated LLM pipelines.</p>
+      <div class="actions">
+        <a href="#projects" class="btn fill">See projects</a>
+        <a href="/Marwan_Hatem_CV.pdf" download class="btn line">Download CV (PDF)</a>
       </div>
     </div>
+    <div class="legend" aria-hidden="true">low <i></i> attention</div>
   </section>
 
-  <section id="about">
-    <div class="container">
-      <div class="sh rv"><span class="tag">// about</span><h2>Engineering AI that <span class="grad">ships</span></h2></div>
-      <div class="about-grid">
-        <div class="rv">
-          <p>I'm a <strong>computer science engineer specializing in artificial intelligence</strong>, with academic training in machine learning and deep learning and a habit of turning theory into working systems.</p>
-          <p>I build <strong>automation workflows with n8n</strong> and fold them into real projects, connecting AI components so whole processes run on their own. My work spans a fully local desktop assistant, a from-scratch medical imaging CNN, and a content pipeline wired to LLM APIs.</p>
-          <p>I pair the technical side with leadership, teamwork and clear communication, and I'm always looking for the next hard problem to learn from.</p>
-          <div class="stats">
-            <div class="stat"><b class="grad">3</b><span>Shipped projects</span></div>
-            <div class="stat"><b class="grad">300+</b><span>Automated tests</span></div>
-            <div class="stat"><b class="grad">15</b><span>Tumor classes</span></div>
-          </div>
-        </div>
-        <div class="tl rv">
-          {timeline.map(([when, what, desc]) => (
-            <div class="tl-i"><small>{when}</small><h3>{what}</h3><p>{desc}</p></div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="projects">
-    <div class="container">
-      <div class="sh rv"><span class="tag">// projects</span><h2>Selected <span class="grad">work</span></h2><p>Systems I've designed and built end to end. Open one for the full case study.</p></div>
-      <div class="pgrid">
-        {projects.map((p) => <ProjectCard id={p.id} data={p.data} />)}
-      </div>
-    </div>
-  </section>
-
-  <section id="skills">
-    <div class="container">
-      <div class="sh rv"><span class="tag">// skills</span><h2>Tools I <span class="grad">build with</span></h2></div>
-      <div class="sgrid">
-        {skills.map(([icon, title, items]) => (
-          <div class="sk rv"><div class="ic" aria-hidden="true">{icon}</div><h3>{title}</h3><ul>{(items as string[]).map((s) => <li>{s}</li>)}</ul></div>
+  <section class="block" id="projects">
+    <div class="wrap">
+      <h2>Projects I designed and built end to end</h2>
+      <div class="index">
+        {projects.map((p, i) => (
+          <a class:list={['row', { lead: i === 0 }]} href={`${base}/projects/${p.id}/`}>
+            <div class="when">{p.data.category}{p.data.date && <><br />{p.data.date}</>}</div>
+            <div><h3>{p.data.title}</h3><p>{p.data.summary}</p></div>
+            <div class="stack">{p.data.tags.join(', ')}</div>
+          </a>
         ))}
       </div>
-      <div class="soft rv"><b>Personal skills</b>{soft.map((s) => <span>{s}</span>)}</div>
     </div>
   </section>
 
-  <section id="certificates">
-    <div class="container">
-      <div class="sh rv"><span class="tag">// certificates</span><h2>Training &amp; <span class="grad">certifications</span></h2></div>
-      <div class="cert-grid">
+  <section class="block" id="about">
+    <div class="wrap">
+      <h2>About me</h2>
+      <div class="about">
+        <div>
+          <p>I'm an AI engineering student in Cairo with training in machine learning and deep learning, and I like turning that theory into software people can actually run.</p>
+          <p>Most of my projects combine a trained model with the product around it: a dashboard, a desktop app, or an n8n workflow that connects AI steps so a whole process runs on its own.</p>
+          <p>Outside the code I bring leadership, teamwork and clear communication, and I'm looking for an AI engineering role where I can keep learning on hard problems.</p>
+        </div>
+        <ol class="path" aria-label="Education and training">
+          {path.map(([when, what, desc]) => (
+            <li><time>{when}</time><h3>{what}</h3><p>{desc}</p></li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="skills">
+    <div class="wrap">
+      <h2>What I work with</h2>
+      <dl class="skills">
+        {skills.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+      </dl>
+      <p class="soft"><b>Also:</b> leadership, teamwork, presentations, time management, project management, problem solving.</p>
+    </div>
+  </section>
+
+  <section class="block" id="certificates">
+    <div class="wrap">
+      <h2>Certificates</h2>
+      <div class="certs">
         {certs.map((c) => (
-          <figure class="cert rv">
-            <Image src={c.img} alt={`Certificate: ${c.title}`} widths={[400, 700]} sizes="(min-width:700px) 340px, 100vw" loading="lazy" />
-            <div><h3>{c.title}</h3><p>{c.by}</p></div>
+          <figure class="cert">
+            <div class="frame"><Image src={c.img} alt={`Certificate: ${c.title}`} widths={[400, 700]} sizes="(min-width:860px) 340px, 100vw" loading="lazy" /></div>
+            <figcaption><h3>{c.title}</h3><p>{c.by}</p></figcaption>
           </figure>
         ))}
-        <a class="cert rv" href="/certificates/depi-data-engineer.pdf" target="_blank" rel="noopener">
-          <div style="padding:40px 24px;text-align:center"><div style="font-size:44px" aria-hidden="true">📄</div></div>
-          <div><h3>Microsoft Data Engineer, Digital Egypt Pioneers Program</h3><p>DEPI · Jun – Dec 2025 · View PDF ↗</p></div>
+        <a class="cert" href="/certificates/depi-data-engineer.pdf" target="_blank" rel="noopener">
+          <div class="frame"><span>Digital Egypt Pioneers Program</span></div>
+          <div><h3>Microsoft Data Engineer track, DEPI</h3><p>Jun – Dec 2025. Opens the PDF certificate.</p></div>
         </a>
       </div>
     </div>
   </section>
 
-  <section id="contact">
-    <div class="container">
-      <div class="sh rv"><span class="tag">// contact</span><h2>Let's build something <span class="grad">together</span></h2><p>Have a project, role or idea in mind? I'd love to hear about it.</p></div>
-      <div class="cgrid">
-        <div class="rv">
-          <div class="ci">
-            <a href="mailto:marwan55hatem@gmail.com"><div class="i">✉️</div><div><small>Email</small><span>marwan55hatem@gmail.com</span></div></a>
-            <a href="tel:+201006453612"><div class="i">📞</div><div><small>Phone</small><span>+20 100 645 3612</span></div></a>
-            <div><div class="i">📍</div><div><small>Location</small><span>Gesr Al Suez, Cairo, Egypt</span></div></div>
-          </div>
-          <div class="soc">
-            <a href="https://github.com/marwan55hatem" target="_blank" rel="noopener">GitHub</a>
-            <a href="https://www.linkedin.com/in/marwan-hatem/" target="_blank" rel="noopener">LinkedIn</a>
-            <a href="https://wa.me/201006453612" target="_blank" rel="noopener">WhatsApp</a>
+  <section class="block" id="contact">
+    <div class="wrap">
+      <h2>Get in touch</h2>
+      <div class="contact">
+        <div>
+          <p class="lead-p">Hiring for an AI role, or have a project in mind? Email me or use the form.</p>
+          <p style="margin-top:24px"><a class="mail" href="mailto:marwan55hatem@gmail.com">marwan55hatem@gmail.com</a></p>
+          <div class="facts">
+            <span>Phone and WhatsApp: <a href="tel:+201006453612">+20 100 645 3612</a></span>
+            <span>Based in Gesr Al Suez, Cairo, Egypt</span>
+            <span><a href="https://github.com/marwan55hatem" target="_blank" rel="noopener">GitHub</a>, <a href="https://www.linkedin.com/in/marwan-hatem/" target="_blank" rel="noopener">LinkedIn</a></span>
           </div>
         </div>
-        <form id="form" class="rv" action="https://formspree.io/f/xqayjrdg" method="POST">
-          <div><label for="n">Name</label><input id="n" name="name" required autocomplete="name" /></div>
-          <div><label for="e">Email</label><input id="e" type="email" name="email" required autocomplete="email" /></div>
+        <form id="form" action="https://formspree.io/f/xqayjrdg" method="POST">
+          <div><label for="n">Your name</label><input id="n" name="name" required autocomplete="name" /></div>
+          <div><label for="e">Your email</label><input id="e" type="email" name="email" required autocomplete="email" /></div>
           <div><label for="m">Message</label><textarea id="m" name="message" required></textarea></div>
-          <button class="btn btn-p" id="send" type="submit">Send message</button>
+          <div><button class="btn fill" id="send" type="submit">Send message</button></div>
           <div id="fs" role="status"></div>
         </form>
       </div>
@@ -143,18 +128,18 @@ const certs = [
 </Base>
 
 <script>
-  const form = document.getElementById('form') as HTMLFormElement | null;
+  const form = document.getElementById('form') as HTMLFormElement;
   const fs = document.getElementById('fs')!;
-  const send = document.getElementById('send') as HTMLButtonElement | null;
-  form?.addEventListener('submit', async (e) => {
+  const send = document.getElementById('send') as HTMLButtonElement;
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    send!.disabled = true; fs.className = ''; fs.textContent = 'Sending…';
+    send.disabled = true; fs.className = ''; fs.textContent = 'Sending…';
     try {
       const r = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
       if (!r.ok) throw new Error();
-      fs.className = 'ok'; fs.textContent = 'Thanks! Your message was sent.'; form.reset();
+      fs.className = 'ok'; fs.textContent = 'Message sent. I will reply by email.'; form.reset();
     } catch {
-      fs.className = 'err'; fs.textContent = 'Something went wrong. Please email me directly.';
-    } finally { send!.disabled = false; }
+      fs.className = 'err'; fs.textContent = 'The message did not send. Check your connection or email me directly.';
+    } finally { send.disabled = false; }
   });
 </script>

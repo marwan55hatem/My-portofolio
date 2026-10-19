@@ -3,7 +3,6 @@ title: "NeuroScan AI: Brain Tumor Classification"
 summary: "A custom CNN built from scratch that classifies brain MRI scans across 15 tumor subtypes plus normal cases, with explainable heatmaps and a clinical dashboard."
 category: "Computer Vision / Deep Learning"
 date: "March 2026"
-icon: "🧠"
 highlights:
   - "5-block Squeeze-and-Excitation Residual CNN, no transfer learning"
   - "Grad-CAM heatmaps showing which brain regions drive each prediction"

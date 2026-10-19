@@ -3,7 +3,6 @@ title: "YouTube Content Automation Pipeline"
 summary: "An end-to-end n8n system that generates AI-driven content and publishes it automatically to LinkedIn."
 category: "Automation"
 date: "June 2026"
-icon: "⚙️"
 highlights:
   - "Multi-step workflows handling triggers, data transformation and API integrations"
   - "AI script and content generation through OpenAI / OpenRouter"

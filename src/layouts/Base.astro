@@ -3,15 +3,12 @@ import '../styles/global.css';
 
 interface Props { title?: string; description?: string; }
 const {
-  title = 'Marwan Hatem | AI Engineer',
-  description = 'Marwan Hatem is an AI engineer building real-world intelligent systems: computer vision, deep learning, NLP, LLMs and n8n automation.',
+  title = 'Marwan Hatem, AI Engineer',
+  description = 'Marwan Hatem is an AI engineer in Cairo building computer vision, deep learning, LLM and n8n automation systems.',
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
-const links = [
-  ['Home', '#home'], ['About', '#about'], ['Projects', '#projects'],
-  ['Skills', '#skills'], ['Certificates', '#certificates'], ['Contact', '#contact'],
-];
+const links = [['Projects', '#projects'], ['About', '#about'], ['Skills', '#skills'], ['Certificates', '#certificates'], ['Contact', '#contact']];
 const person = {
   '@context': 'https://schema.org', '@type': 'Person', name: 'Marwan Hatem',
   jobTitle: 'AI Engineer', url: Astro.site?.toString(),
@@ -28,7 +25,6 @@ const person = {
   <title>{title}</title>
   <meta name="description" content={description} />
   <meta name="author" content="Marwan Hatem" />
-  <meta name="theme-color" content="#0a0a0b" />
   <link rel="canonical" href={canonical} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta property="og:type" content="website" />
@@ -38,53 +34,40 @@ const person = {
   <meta name="twitter:card" content="summary" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <script is:inline>
-    try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (!t && window.matchMedia('(prefers-color-scheme: dark)').matches) t = 'dark';
+      document.documentElement.dataset.theme = t || 'light';
+    })();
   </script>
   <script type="application/ld+json" set:html={JSON.stringify(person)} />
 </head>
 <body>
-  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:bg-[var(--bg2)] focus:px-4 focus:py-2 focus:rounded">Skip to content</a>
-  <div class="bg" aria-hidden="true"></div>
-  <nav aria-label="Primary">
-    <a href={home} class="logo">MH<span class="grad">.</span></a>
-    <div class="nav-links">
-      {links.map(([l, h]) => <a href={home + h}>{l}</a>)}
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-[var(--panel)] focus:px-4 focus:py-2">Skip to content</a>
+  <header class="bar">
+    <div class="wrap">
+      <a href={home} class="name">Marwan Hatem</a>
+      <nav aria-label="Sections">
+        {links.map(([l, h]) => <a href={home + h}>{l}</a>)}
+      </nav>
+      <button class="theme-btn" id="theme" type="button" aria-label="Switch colour theme">Dark</button>
     </div>
-    <div class="nav-r">
-      <button class="icon-btn" id="theme" aria-label="Toggle light/dark theme">◐</button>
-      <button class="icon-btn burger" id="burger" aria-label="Open menu" aria-expanded="false">☰</button>
-    </div>
-  </nav>
-  <div class="mmenu" id="mmenu">
-    {links.map(([l, h]) => <a href={home + h}>{l}</a>)}
-  </div>
+  </header>
   <main id="main"><slot /></main>
-  <footer><div class="container">© <span id="yr">{new Date().getFullYear()}</span> Marwan Hatem · Built with Astro &amp; Tailwind</div></footer>
-  <button id="top" aria-label="Back to top">↑</button>
+  <footer><div class="wrap">© {new Date().getFullYear()} Marwan Hatem, Cairo</div></footer>
   <script>
     const root = document.documentElement;
-    document.getElementById('theme')?.addEventListener('click', () => {
-      const next = root.dataset.theme === 'light' ? 'dark' : 'light';
-      root.dataset.theme = next;
-      try { localStorage.setItem('theme', next); } catch {}
+    const btn = document.getElementById('theme')!;
+    const label = () => { btn.textContent = root.dataset.theme === 'dark' ? 'Light' : 'Dark'; };
+    label();
+    btn.addEventListener('click', () => {
+      root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem('theme', root.dataset.theme); } catch {}
+      label();
     });
-    const menu = document.getElementById('mmenu')!, burger = document.getElementById('burger')!;
-    const setMenu = (open: boolean) => {
-      menu.classList.toggle('open', open);
-      burger.setAttribute('aria-expanded', String(open));
-      document.body.style.overflow = open ? 'hidden' : '';
-    };
-    burger.addEventListener('click', () => setMenu(!menu.classList.contains('open')));
-    menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
-    const io = new IntersectionObserver((es) => es.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-    }), { threshold: 0.12 });
-    document.querySelectorAll('.rv').forEach((el) => io.observe(el));
-    const top = document.getElementById('top')!;
-    addEventListener('scroll', () => top.classList.toggle('show', scrollY > 600), { passive: true });
-    top.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
   </script>
 </body>
 </html>
