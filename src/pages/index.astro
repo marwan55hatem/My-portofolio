@@ -13,9 +13,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const focus = ['Computer Vision', 'Deep Learning', 'NLP', 'LLMs', 'RAG', 'Automation'];
 const education = [
-  ['Feb – Oct 2026', 'Advanced AI Diploma, Instant Software Solutions', '150-hour diploma in deep learning, computer vision, NLP, LLMs, RAG and MLOps, with an LLM project.'],
-  ['Jul – Dec 2025', 'Data Engineer & AI, DEPI', 'Built and optimised data pipelines, prepared datasets for AI, supported model integration and deployment.'],
-  ['Aug 2024', 'ML & Computer Vision Fundamentals, Arab Open University', 'Object detection, edge detection, segmentation and deep learning basics.'],
   ['Sep 2023 – Feb 2027', 'BSc in Artificial Intelligence, Arab Open University', 'Machine learning and deep learning coursework, Cairo.'],
 ];
 const skills = [
@@ -31,6 +28,36 @@ const certs: { img: ImageMetadata; title: string; by: string; pdf?: string }[] =
   { img: depi, title: 'Microsoft Data Engineer, Digital Egypt Pioneers Program', by: 'DEPI, Ministry of Communications and IT, Jun – Dec 2025', pdf: '/certificates/depi-data-engineer.pdf' },
   { img: aou, title: 'Fundamentals of Data Science and Machine Learning', by: 'Arab Open University, Jun – Aug 2024' },
   { img: jelecom, title: 'Machine Learning Basics, 40 hours, graded Excellent', by: 'Jelecom Egypt, Aug – Sep 2023' },
+];
+const certHref = (c: (typeof certs)[number]) => (c.pdf ? `${base}${c.pdf}` : c.img.src);
+const experience = [
+  {
+    when: 'Feb – Oct 2026', role: 'Advanced AI Diploma', org: 'Instant Software Solutions', kind: '150-hour diploma', cert: certs[0],
+    points: [
+      'Studied deep learning, computer vision, NLP, LLMs, RAG and MLOps.',
+      'Focused on building, deploying and optimising real-world AI systems.',
+      'Worked on an LLM project as part of the program.',
+    ],
+  },
+  {
+    when: 'Jun – Dec 2025', role: 'Microsoft Data Engineer', org: 'Digital Egypt Pioneers Program (DEPI)', kind: 'National training program', cert: certs[1],
+    points: [
+      'Built and optimised data pipelines.',
+      'Prepared and cleaned datasets for AI applications.',
+      'Worked with ML engineers to support model integration and deployment.',
+    ],
+  },
+  {
+    when: 'Jun – Aug 2024', role: 'Fundamentals of Data Science and Machine Learning', org: 'Arab Open University', kind: 'Certificate program', cert: certs[2],
+    points: [
+      'Learned machine learning and image processing foundations.',
+      'Covered object detection, edge detection, image segmentation and deep learning basics.',
+    ],
+  },
+  {
+    when: 'Aug – Sep 2023', role: 'Machine Learning Basics', org: 'Jelecom Egypt', kind: '40-hour training program', cert: certs[3],
+    points: ['Completed the program with a general grade of Excellent.'],
+  },
 ];
 ---
 <Base>
@@ -64,8 +91,26 @@ const certs: { img: ImageMetadata; title: string; by: string; pdf?: string }[] =
         <p class="muted" style="margin-top:14px;font-size:15px">Select a project name to read how it was built.</p>
       </section>
 
+      <section id="experience">
+        <h2>Experience</h2>
+        <p class="muted" style="margin-bottom:8px">Professional training programs, each completed with a certificate.</p>
+        <ol class="steps">
+          {experience.map((x) => (
+            <li>
+              <time>{x.when}</time>
+              <div>
+                <h3>{x.role}</h3>
+                <p>{x.org}, {x.kind.charAt(0).toLowerCase() + x.kind.slice(1)}</p>
+                <ul class="points">{x.points.map((p) => <li>{p}</li>)}</ul>
+                <a class="cert-link" href={certHref(x.cert)} target="_blank" rel="noopener">View certificate</a>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
       <section id="education">
-        <h2>Education and training</h2>
+        <h2>Education</h2>
         <ol class="steps">
           {education.map(([when, what, desc]) => (
             <li><time>{when}</time><div><h3>{what}</h3><p>{desc}</p></div></li>
@@ -86,7 +131,7 @@ const certs: { img: ImageMetadata; title: string; by: string; pdf?: string }[] =
         <h2>Certificates</h2>
         <div class="certs">
           {certs.map((c) => (
-            <a class="cert" href={c.pdf ? `${base}${c.pdf}` : c.img.src} target="_blank" rel="noopener">
+            <a class="cert" href={certHref(c)} target="_blank" rel="noopener">
               <div class="frame"><Image src={c.img} alt={`Certificate: ${c.title}`} widths={[400, 700]} sizes="(min-width:960px) 400px, 100vw" loading="lazy" /></div>
               <h3>{c.title}</h3><p>{c.by}</p>
             </a>

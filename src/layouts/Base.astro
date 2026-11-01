@@ -8,7 +8,7 @@ const {
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
-const links = [['Projects', '#projects'], ['Education', '#education'], ['Skills', '#skills'], ['Certificates', '#certificates'], ['Contact', '#contact']];
+const links = [['Projects', '#projects'], ['Experience', '#experience'], ['Education', '#education'], ['Skills', '#skills'], ['Certificates', '#certificates'], ['Contact', '#contact']];
 const person = {
   '@context': 'https://schema.org', '@type': 'Person', name: 'Marwan Hatem',
   jobTitle: 'AI Engineer', url: Astro.site?.toString(),
